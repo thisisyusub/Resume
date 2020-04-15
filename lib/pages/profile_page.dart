@@ -20,7 +20,7 @@ class ProfilePage extends StatelessWidget {
             : null,
         body: ListView(
           children: <Widget>[
-            About(),
+            About(MediaQuery.of(context).size.width),
             Skills(),
           ],
         ),

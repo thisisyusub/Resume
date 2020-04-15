@@ -1,116 +1,118 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:resume/responsive_widget.dart';
 
-class About extends StatelessWidget {
+class About extends StatefulWidget {
+  final double screenWidth;
+
+  About(this.screenWidth) : assert(screenWidth != null);
+
+  @override
+  _AboutState createState() => _AboutState();
+}
+
+class _AboutState extends State<About> with SingleTickerProviderStateMixin {
+  final List<String> _words = [
+    'Kanan Yusubov',
+    'Flutter Developer',
+    'Founder of Azerbaijan Flutter Users Community',
+  ];
+  String _currentWord = '';
+  int _index = 0;
+  int _listIndex = 0;
+  Timer _timer;
+  double _opacity = 0.4;
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      lowerBound: 0.0,
+      upperBound: widget.screenWidth * 0.2,
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _timer = Timer.periodic(Duration(milliseconds: 100), (_) {
+      setState(() {
+        if (_listIndex >= _words.length) {
+          _listIndex = 0;
+        }
+
+        if (_index > _words[_listIndex].length) {
+          /// if word is completed go to next
+          _listIndex++;
+          _index = 0;
+        } else {
+          /// continue to word letters
+          _currentWord = _words[_listIndex].substring(0, _index);
+          _index++;
+        }
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveWidget(
-      smallScreen: _buildSmallAndMediumWidget(context),
+      largeScreen: _buildLargeAboutWidget(context),
       mediumScreen: _buildSmallAndMediumWidget(context),
-      largeScreen: _buildLargeWidget(context),
+      smallScreen: _buildSmallAndMediumWidget(context),
     );
   }
 
-  Widget _buildLargeWidget(BuildContext context) {
+  Widget _buildLargeAboutWidget(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Container(
+      height: screenSize.height,
       margin: EdgeInsets.symmetric(
-        horizontal: 100,
+        horizontal: 50,
         vertical: 10,
       ),
-      padding: EdgeInsets.all(40),
-      color: Colors.black38,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image.asset(
-                    'assets/profile.jpg',
-                    width: MediaQuery.of(context).size.width * 0.2,
-                    height: MediaQuery.of(context).size.width * 0.16,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                _infoItem('Adress', 'Binagadi district'),
-                Divider(),
-                _infoItem('Phone', '+994 77 536-19-99'),
-                Divider(),
-                _infoItem('Email', 'kanan.yusubov@yandex.com'),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+          Spacer(),
+          Text(
+            _currentWord,
+            style: TextStyle(fontSize: 40),
+            textAlign: TextAlign.center,
           ),
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            flex: 2,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          Spacer(),
+          Transform.translate(
+            offset: Offset(-_animationController.value, 0),
+            child: Stack(
+              alignment: Alignment.center,
               children: <Widget>[
                 Text(
-                  'Kanan Yusubov',
+                  'Hover!',
                   style: TextStyle(
-                    fontSize: 30,
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
                 ),
-                SizedBox(height: 10),
-                Text(
-                  'Flutter Developer & Founder of Azerbaijan Flutter Users Community',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  '''Sed ut perspiciatis unde omnis iste natus\nerror sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.\n
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.\n
-Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.
-            ''',
-                  textAlign: TextAlign.justify,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      height: 40,
-                      child: RaisedButton(
-                        hoverColor: Colors.pinkAccent,
-                        color: Colors.pink,
-                        onPressed: () {},
-                        child: Text(
-                          'Contact me',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                Opacity(
+                  opacity: _opacity,
+                  child: GestureDetector(
+                    onTap: () => _animationController.forward(),
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/profile.jpg',
+                        width: screenSize.width * 0.3,
+                        height: screenSize.width * 0.3,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                )
               ],
             ),
           ),
+          Spacer(),
         ],
       ),
     );
@@ -145,6 +147,7 @@ Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed 
           Image.asset(
             'assets/profile.jpg',
             width: double.infinity,
+            height: 500,
             fit: BoxFit.fill,
           ),
           SizedBox(
@@ -164,6 +167,7 @@ Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor
 Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.
           ''',
             textAlign: TextAlign.justify,
+            softWrap: true,
           ),
           SizedBox(
             height: 10,
@@ -223,5 +227,12 @@ Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed 
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _animationController.dispose();
+    super.dispose();
   }
 }

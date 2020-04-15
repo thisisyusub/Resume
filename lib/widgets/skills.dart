@@ -93,8 +93,8 @@ class Skills extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(
         top: 30,
-        left: ResponsiveWidget.isLargeScreen(context) ? 100 : 10,
-        right: ResponsiveWidget.isLargeScreen(context) ? 100 : 10,
+        left: ResponsiveWidget.isLargeScreen(context) ? 50 : 10,
+        right: ResponsiveWidget.isLargeScreen(context) ? 50 : 10,
         bottom: 30,
       ),
       child: ResponsiveWidget(
