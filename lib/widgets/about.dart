@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:resume/responsive_widget.dart';
 
 class About extends StatefulWidget {
-  final double screenWidth;
+  final void Function(int) goToPosition;
 
-  About(this.screenWidth) : assert(screenWidth != null);
+  About(this.goToPosition) : assert(goToPosition != null);
 
   @override
   _AboutState createState() => _AboutState();
@@ -22,18 +23,9 @@ class _AboutState extends State<About> with SingleTickerProviderStateMixin {
   int _index = 0;
   int _listIndex = 0;
   Timer _timer;
-  double _opacity = 0.4;
-  AnimationController _animationController;
 
   @override
   void initState() {
-    _animationController = AnimationController(
-      lowerBound: 0.0,
-      upperBound: widget.screenWidth * 0.2,
-      duration: Duration(milliseconds: 500),
-      vsync: this,
-    );
-
     _timer = Timer.periodic(Duration(milliseconds: 100), (_) {
       setState(() {
         if (_listIndex >= _words.length) {
@@ -68,10 +60,6 @@ class _AboutState extends State<About> with SingleTickerProviderStateMixin {
 
     return Container(
       height: screenSize.height,
-      margin: EdgeInsets.symmetric(
-        horizontal: 50,
-        vertical: 10,
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -83,32 +71,67 @@ class _AboutState extends State<About> with SingleTickerProviderStateMixin {
             textAlign: TextAlign.center,
           ),
           Spacer(),
-          Transform.translate(
-            offset: Offset(-_animationController.value, 0),
-            child: Stack(
-              alignment: Alignment.center,
+          Expanded(
+            flex: 5,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  'Hover!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+                ClipOval(
+                  child: Image.asset(
+                    'assets/profile.jpg',
+                    width: screenSize.width * 0.3,
+                    height: screenSize.width * 0.3,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                Opacity(
-                  opacity: _opacity,
-                  child: GestureDetector(
-                    onTap: () => _animationController.forward(),
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/profile.jpg',
-                        width: screenSize.width * 0.3,
-                        height: screenSize.width * 0.3,
-                        fit: BoxFit.cover,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.1,
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    FlatButton(
+                      child: Text(
+                        'About',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).highlightColor,
+                        ),
                       ),
+                      onPressed: () => widget.goToPosition(1),
                     ),
-                  ),
-                )
+                    FlatButton(
+                      child: Text(
+                        'Skills',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).highlightColor,
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
+                    FlatButton(
+                      child: Text(
+                        'Portfolio',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).highlightColor,
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
+                    FlatButton(
+                      child: Text(
+                        'Contacts',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).highlightColor,
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -232,7 +255,6 @@ Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed 
   @override
   void dispose() {
     _timer.cancel();
-    _animationController.dispose();
     super.dispose();
   }
 }

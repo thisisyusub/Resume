@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         accentColor: Colors.black12,
         buttonColor: Colors.black12,
+        highlightColor: Colors.pink,
       ),
       home: ProfilePage(),
     );
