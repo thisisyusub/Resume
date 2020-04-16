@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:resume/pages/profile_page.dart';
+import 'package:resume/pages/home_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         buttonColor: Colors.black12,
         highlightColor: Colors.pink,
       ),
-      home: ProfilePage(),
+      home: HomePage(),
     );
   }
 }

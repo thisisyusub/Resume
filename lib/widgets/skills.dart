@@ -98,7 +98,7 @@ class Skills extends StatelessWidget {
         bottom: 30,
       ),
       child: ResponsiveWidget(
-        largeScreen: _buildLargeSkillsWidget(),
+        largeScreen: _buildLargeSkillsWidget(context),
         mediumScreen: _buildMediumAndSmallWidget(),
         smallScreen: _buildMediumAndSmallWidget(),
       ),
@@ -128,32 +128,34 @@ class Skills extends StatelessWidget {
     );
   }
 
-  Widget _buildLargeSkillsWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text('Skills'),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              child: _skillWidget(
-                'Professional',
+  Widget _buildLargeSkillsWidget(BuildContext context) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text('Skills'),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: _skillWidget(
+                  'Professional',
+                ),
               ),
-            ),
-            SizedBox(
-              width: 30,
-            ),
-            Expanded(
-              child: _skillWidget(
-                'Personal',
-                true,
+              SizedBox(
+                width: 30,
               ),
-            ),
-          ],
-        ),
-      ],
+              Expanded(
+                child: _skillWidget(
+                  'Personal',
+                  true,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
